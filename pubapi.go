@@ -52,7 +52,7 @@ func Del(id int) {
 }
 
 // Monitor lanza la goroutine que maneja los posts.
-func Monitor() chan request {
+func Monitor() {
 	// Iniciamos el canal para los requests al monitor goroutine.
 	requests = make(chan request)
 
@@ -90,10 +90,11 @@ func Monitor() chan request {
 			}
 		}
 	}()
+}
 
-	// Código cliente usará este canal para enviar los requests y señalar que
-	// terminemos al cerrarlo.
-	return requests
+func Stop() {
+	// Al cerrar requests, la monitor goroutine terminará.
+	close(requests)
 }
 
 // NewId genera un ID único para un post.

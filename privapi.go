@@ -13,7 +13,8 @@ type response struct {
 	posts []Post
 }
 
-// requests es el canal para recibir los requests de código cliente. Debe ser
-// cerrado por código cliente para que la monitor goroutine termine.
+// requests es el canal para recibir los requests para interactuar con los posts.
+// Monitor() lo inicia y lanza la monitor goroutine que recibe de él para
+// procesar requests. Stop() lo cierra para que la monitor goroutine termine.
 var requests chan request
 
