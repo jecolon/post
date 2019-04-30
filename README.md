@@ -34,3 +34,4 @@ post.Del(p1.Id)
 
 // Stop the monitor goroutine.
 post.Stop()
+```
