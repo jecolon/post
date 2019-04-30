@@ -1,6 +1,6 @@
 package post
 
-import (
+import(
 	"math/rand"
 	"time"
 )
@@ -51,29 +51,15 @@ func Del(id int) {
 	requests <- req
 }
 
-// Solicitud de lectura o mutación al map de posts.
-type request struct {
-	verb     string
-	post     Post
-	response chan response
-}
-
-// Respuesta a una solicitud de lectura o mutación al map de posts.
-type response struct {
-	posts []Post
-}
-
-// Canal para recibir los requests de lectura o mutación al map de posts.
-var requests chan request
-
-// Monitor lanza la goroutine que maneja el map de posts.
+// Monitor lanza la goroutine que maneja los posts.
 func Monitor() chan request {
-	// Iniciamos el canal para los requests al monitor.
+	// Iniciamos el canal para los requests al monitor goroutine.
 	requests = make(chan request)
 
-	// Lanzamos la goroutine monitor.
+	// Lanzamos la monitor goroutine .
 	go func() {
-		// El map de posts está confinado a esta goroutine solamente.
+		// El map de posts está confinado a esta goroutine solamente, lo cual
+		// sincroniza el acceso y lo hace seguro para uso concurrente.
 		posts := make(map[int]Post)
 
 		// Procesamos los requests.
@@ -85,22 +71,28 @@ func Monitor() chan request {
 				for _, p := range posts {
 					resp.posts = append(resp.posts, p)
 				}
+				// Enviamos la respuesta.
 				req.response <- resp
 			case "GET":
 				if p, ok := posts[req.post.Id]; ok {
 					resp.posts = append(resp.posts, p)
 				}
+				// Enviamos la respuesta.
 				req.response <- resp
 			case "POST":
 				posts[req.post.Id] = req.post
 			case "PUT":
+				// Validación de que el post existe debe ocurrir antes si es necesario.
 				posts[req.post.Id] = req.post
 			case "DELETE":
+				// Validación de que el post existe debe ocurrir antes si es necesario.
 				delete(posts, req.post.Id)
 			}
 		}
 	}()
 
+	// Código cliente usará este canal para enviar los requests y señalar que
+	// terminemos al cerrarlo.
 	return requests
 }
 
