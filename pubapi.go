@@ -51,7 +51,7 @@ func Del(id int) {
 	requests <- req
 }
 
-// Start lanza la goroutine que maneja los posts.
+// Start lanza la monitor goroutine que maneja los posts.
 func Start() {
 	// Iniciamos el canal para los requests al monitor goroutine.
 	requests = make(chan request)
@@ -92,6 +92,7 @@ func Start() {
 	}()
 }
 
+// Stop detiene la monitor goroutine.
 func Stop() {
 	// Al cerrar requests, la monitor goroutine terminará.
 	close(requests)
