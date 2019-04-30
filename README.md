@@ -1,5 +1,5 @@
 # post
-Post resource for REST API that provides concurrency safe accessor and mutator functions.
+Post resource for REST API that provides concurrency safe accessor and mutator functions via a monitor goroutine.
 
 ## Quick Start
 See https://github.com/jecolon/restsrv for a sample REST API server that uses this package.
