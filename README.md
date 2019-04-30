@@ -10,7 +10,7 @@ post.Start()
 
 // A Post instance
 p1 := post.Post{
-  Id: post.NewId(),
+  Id: post.NewId(), // post.NewID() generates unique post ID.
   UserId: 1,
   Title: "The title",
   Body: "The body of the post.",
