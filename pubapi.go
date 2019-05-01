@@ -51,49 +51,9 @@ func Del(id int) {
 	requests <- req
 }
 
-// Start lanza la monitor goroutine que maneja los posts.
-func Start() {
-	// Iniciamos el canal para los requests al monitor goroutine.
-	requests = make(chan request)
-
-	// Lanzamos la monitor goroutine .
-	go func() {
-		// El map de posts está confinado a esta goroutine solamente, lo cual
-		// sincroniza el acceso y lo hace seguro para uso concurrente.
-		posts := make(map[int]Post)
-
-		// Procesamos los requests.
-		for req := range requests {
-			var resp response
-			// Actuamos según el verbo del request.
-			switch req.verb {
-			case "LIST":
-				for _, p := range posts {
-					resp.posts = append(resp.posts, p)
-				}
-				// Enviamos la respuesta.
-				req.response <- resp
-			case "GET":
-				if p, ok := posts[req.post.Id]; ok {
-					resp.posts = append(resp.posts, p)
-				}
-				// Enviamos la respuesta.
-				req.response <- resp
-			case "POST":
-				posts[req.post.Id] = req.post
-			case "PUT":
-				// Validación de que el post existe debe ocurrir antes si es necesario.
-				posts[req.post.Id] = req.post
-			case "DELETE":
-				// Validación de que el post existe debe ocurrir antes si es necesario.
-				delete(posts, req.post.Id)
-			}
-		}
-	}()
-}
-
-// Stop detiene la monitor goroutine.
-func Stop() {
+// Shutdown detiene la monitor goroutine. Cualquier uso de las funciones de este
+// paquete luego de llamar Shutdown resultarán en un panic.
+func Shutdown() {
 	// Al cerrar requests, la monitor goroutine terminará.
 	close(requests)
 }
