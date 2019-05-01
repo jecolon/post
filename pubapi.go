@@ -1,6 +1,6 @@
 package post
 
-import(
+import (
 	"math/rand"
 	"time"
 )
@@ -29,7 +29,7 @@ func Get(id int) (Post, bool) {
 func List() []Post {
 	req := request{"LIST", Post{}, make(chan response)}
 	requests <- req
-	resp := <- req.response
+	resp := <-req.response
 	return resp.posts
 }
 
@@ -70,4 +70,3 @@ func NewId() int {
 	}
 	return id
 }
-
