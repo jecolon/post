@@ -5,9 +5,6 @@ Post resource for REST API that provides concurrency safe accessor and mutator f
 See https://github.com/jecolon/restsrv for a sample REST API server that uses this package.
 
 ```go
-// Start the monitor goroutine
-post.Start()
-
 // A Post instance
 p1 := post.Post{
   Id: post.NewId(), // post.NewID() generates unique post ID.
@@ -32,6 +29,6 @@ post.Set(p1)
 // Delete a post.
 post.Del(p1.Id)
 
-// Stop the monitor goroutine.
-post.Stop()
+// Stop the monitor goroutine. Can be used with http.Server.RegisterOnShutdown().
+post.Shutdown()
 ```
