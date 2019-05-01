@@ -1,3 +1,5 @@
+// Package post provides an API for accessing and manipulating content posts.
+// The API functions are safe for concurrent access from multiple goroutines.
 package post
 
 import (
