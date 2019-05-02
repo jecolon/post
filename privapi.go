@@ -10,12 +10,7 @@ func init() {
 type request struct {
 	verb     string // LIST, GET, POST, PUT, DELETE
 	post     Post
-	response chan response
-}
-
-// response es la respuesta a un request. Solo los verbos LIST y GET lo usan.
-type response struct {
-	posts []Post
+	response chan []Post
 }
 
 // requests es el canal para recibir los requests para interactuar con los posts.
@@ -36,21 +31,22 @@ func start() {
 
 		// Procesamos los requests.
 		for req := range requests {
-			var resp response
 			// Actuamos según el verbo del request.
 			switch req.verb {
 			case "LIST":
+				var list []Post
 				for _, p := range posts {
-					resp.posts = append(resp.posts, p)
+					list = append(list, p)
 				}
 				// Enviamos la respuesta.
-				req.response <- resp
+				req.response <- list
 			case "GET":
+				var list []Post
 				if p, ok := posts[req.post.Id]; ok {
-					resp.posts = append(resp.posts, p)
+					list = append(list, p)
 				}
 				// Enviamos la respuesta.
-				req.response <- resp
+				req.response <- list
 			case "POST":
 				posts[req.post.Id] = req.post
 			case "PUT":

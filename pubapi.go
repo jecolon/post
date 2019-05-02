@@ -18,21 +18,20 @@ type Post struct {
 // Get busca un post por ID. El bool es falso si no lo encontramos.
 func Get(id int) (Post, bool) {
 	p := Post{Id: id}
-	req := request{"GET", p, make(chan response)}
+	req := request{"GET", p, make(chan []Post)}
 	requests <- req
-	resp := <-req.response
-	if len(resp.posts) == 0 {
+	posts := <-req.response
+	if len(posts) == 0 {
 		return p, false
 	}
-	return resp.posts[0], true
+	return posts[0], true
 }
 
 // List devuelve un slice de todos los posts.
 func List() []Post {
-	req := request{"LIST", Post{}, make(chan response)}
+	req := request{"LIST", Post{}, make(chan []Post)}
 	requests <- req
-	resp := <-req.response
-	return resp.posts
+	return <-req.response
 }
 
 // Add guarda un post nuevo.
