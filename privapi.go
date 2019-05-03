@@ -14,7 +14,7 @@ type request struct {
 }
 
 // requests es el canal para recibir los requests para interactuar con los posts.
-// Monitor() lo inicia y lanza la monitor goroutine que recibe de él para
+// start() lo inicia y lanza la monitor goroutine que recibe de él para
 // procesar requests. Stop() lo cierra para que la monitor goroutine termine.
 var requests chan request
 
