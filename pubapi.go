@@ -17,12 +17,12 @@ type Post struct {
 
 // Get busca un post por ID. El bool es falso si no lo encontramos.
 func Get(id int) (Post, bool) {
-	p := Post{Id: id}
-	req := request{"GET", p, make(chan []Post)}
+	req := request{"GET", Post{Id: id}, make(chan []Post)}
 	requests <- req
 	posts := <-req.response
 	if len(posts) == 0 {
-		return p, false
+		// Slice vacío; no se encontró el post.
+		return Post{}, false
 	}
 	return posts[0], true
 }
