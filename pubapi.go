@@ -35,13 +35,13 @@ func List() []Post {
 }
 
 // Add guarda un post nuevo.
-func Add(p Post) {
+func New(p Post) {
 	req := request{"POST", p, nil} // no hay que esperar respuesta
 	requests <- req
 }
 
 // Set guarda un post existente.
-func Set(p Post) {
+func Put(p Post) {
 	req := request{"PUT", p, nil} // no hay que esperar respuesta
 	requests <- req
 }
