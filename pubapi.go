@@ -29,10 +29,11 @@ func List() []Post {
 	return <-req.response
 }
 
-// Add guarda un post nuevo.
-func New(p Post) {
-	req := request{"POST", p, nil} // no hay que esperar respuesta
+// New guarda un post nuevo.
+func New(p Post) []Post {
+	req := request{"POST", p, make(chan []Post)}
 	requests <- req
+	return <-req.response
 }
 
 // Set guarda un post existente.

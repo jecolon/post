@@ -64,6 +64,7 @@ func monitor() {
 				req.post.Id = rand.Intn(1000)
 			}
 			posts[req.post.Id] = req.post
+			req.response <- []Post{req.post}
 		case "PUT":
 			// Validación de que el post existe debe ocurrir antes si es necesario.
 			posts[req.post.Id] = req.post
