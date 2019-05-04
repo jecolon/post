@@ -1,5 +1,10 @@
 package post
 
+import(
+	"math/rand"
+	"time"
+)
+
 // init lanza la monitor goroutine.
 func init() {
 	start()
@@ -52,6 +57,7 @@ func monitor() {
 			// Enviamos la respuesta.
 			req.response <- list
 		case "POST":
+			req.post.Id = newId() // Asignamos ID nuevo y único.
 			posts[req.post.Id] = req.post
 		case "PUT":
 			// Validación de que el post existe debe ocurrir antes si es necesario.
@@ -61,4 +67,17 @@ func monitor() {
 			delete(posts, req.post.Id)
 		}
 	}
+}
+
+// newId genera un ID único para un post.
+func newId() int {
+	rand.Seed(time.Now().UnixNano())
+	id := rand.Intn(1000)
+	for {
+		if _, ok := Get(id); !ok {
+			break
+		}
+		id = rand.Intn(1000)
+	}
+	return id
 }

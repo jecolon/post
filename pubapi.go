@@ -2,11 +2,6 @@
 // The API functions are safe for concurrent access from multiple goroutines.
 package post
 
-import (
-	"math/rand"
-	"time"
-)
-
 // Post es una entrada de contenido.
 type Post struct {
 	Id     int
@@ -57,17 +52,4 @@ func Del(id int) {
 func Shutdown() {
 	// Al cerrar requests, la monitor goroutine terminará.
 	close(requests)
-}
-
-// NewId genera un ID único para un post.
-func NewId() int {
-	rand.Seed(time.Now().UnixNano())
-	id := rand.Intn(1000)
-	for {
-		if _, ok := Get(id); !ok {
-			break
-		}
-		id = rand.Intn(1000)
-	}
-	return id
 }
