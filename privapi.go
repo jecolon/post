@@ -60,10 +60,7 @@ func monitor() {
 			// Generamos ID único para el nuevo post.
 			rand.Seed(time.Now().UnixNano())
 			req.post.Id = rand.Intn(1000)
-			for {
-				if _, ok := posts[req.post.Id]; !ok {
-					break
-				}
+			for _, ok := posts[req.post.Id]; ok; {
 				req.post.Id = rand.Intn(1000)
 			}
 			posts[req.post.Id] = req.post
